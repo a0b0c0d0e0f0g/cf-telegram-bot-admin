@@ -24,7 +24,7 @@ export const POST: RequestHandler = async ({ request, platform, cookies }) => {
     .bind(email)
     .first<any>();
 
-  if (!row) return json({ error: "INVALID_CREDENTIALS" }, 401);
+  if (!row) return json({ error: "ACCOUNT_NOT_FOUND" }, 401);
 
   if (password !== row.password_hash) return json({ error: "INVALID_CREDENTIALS" }, 401);
 
