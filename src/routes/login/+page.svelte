@@ -46,8 +46,7 @@
     </button>
 
     <p class="text-xs text-slate-500">
-      若未初始化，首次登录会自动创建管理员（默认账号 admin / 密码 rjkk..）；也可先调用
-      <code class="px-1 rounded bg-slate-100">/api/bootstrap</code> 预先指定账号。
+      首次初始化请调用 <code class="px-1 rounded bg-slate-100">/api/bootstrap</code> 创建管理员（默认账号 admin / 密码 rjkk..）。
     </p>
   </div>
 </div>
