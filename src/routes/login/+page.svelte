@@ -30,8 +30,8 @@
     <h1 class="text-xl font-semibold">管理后台登录</h1>
 
     <div class="space-y-2">
-      <label class="text-sm text-slate-600" for="login-email">邮箱</label>
-      <input id="login-email" class="w-full rounded-xl border p-3" placeholder="admin@example.com" bind:value={email} />
+      <label class="text-sm text-slate-600" for="login-account">账号</label>
+      <input id="login-account" class="w-full rounded-xl border p-3" placeholder="admin" bind:value={email} />
     </div>
 
     <div class="space-y-2">
@@ -46,7 +46,8 @@
     </button>
 
     <p class="text-xs text-slate-500">
-      首次初始化请调用 <code class="px-1 rounded bg-slate-100">/api/bootstrap</code> 创建管理员。
+      若未初始化，首次登录会自动创建管理员（使用你输入的账号密码，默认账号 admin / 密码 rjkk..）；也可先调用
+      <code class="px-1 rounded bg-slate-100">/api/bootstrap</code> 预先指定账号。
     </p>
   </div>
 </div>
