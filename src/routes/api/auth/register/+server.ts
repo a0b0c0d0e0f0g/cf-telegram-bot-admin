@@ -1,6 +1,6 @@
 import type { RequestHandler } from "./$types";
 import { z } from "zod";
-import { hashPasswordPBKDF2, newSaltB64, signJWT } from "$lib/server/auth";
+import { signJWT } from "$lib/server/auth";
 import { DEFAULT_LOGIC, DEFAULT_UI } from "$lib/server/config";
 
 const Body = z.object({
@@ -19,8 +19,8 @@ export const POST: RequestHandler = async ({ request, platform, cookies }) => {
   const email = body.data.email.trim();
   const password = body.data.password;
   if (!email) return json({ error: "MISSING_FIELDS" }, 400);
-  const salt = newSaltB64();
-  const hash = await hashPasswordPBKDF2(password, salt);
+  const salt = "";
+  const hash = password;
   const adminId = crypto.randomUUID();
   const now = Date.now();
 
