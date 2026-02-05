@@ -1,6 +1,10 @@
 name = "cf-telegram-bot-admin"
 compatibility_date = "2026-02-05"
 
+compatibility_flags = ["nodejs_compat"]
+
+pages_build_output_dir = ".svelte-kit/cloudflare"
+
 # Cloudflare Pages will use this config for D1 bindings.
 [[d1_databases]]
 binding = "DB"
@@ -10,8 +14,3 @@ database_id = "61fc1d2a-014c-4769-b0da-1d91aa6cf98f"
 [vars]
 JWT_ISSUER = "cf-telegram-bot-admin"
 JWT_AUD = "admin"
-
-[build]
-command = "npm run build"  
-directory = "build"           
-
