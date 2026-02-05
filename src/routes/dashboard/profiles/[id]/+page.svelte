@@ -102,18 +102,18 @@
   {:else}
     <div class="mt-4 space-y-3">
       <div>
-        <label class="text-sm text-slate-600">名称</label>
-        <input class="w-full rounded-xl border p-3" bind:value={profile.name} />
+        <label class="text-sm text-slate-600" for="profile-name">名称</label>
+        <input id="profile-name" class="w-full rounded-xl border p-3" bind:value={profile.name} />
       </div>
 
       <div>
-        <label class="text-sm text-slate-600">描述</label>
-        <input class="w-full rounded-xl border p-3" bind:value={profile.description} />
+        <label class="text-sm text-slate-600" for="profile-description">描述</label>
+        <input id="profile-description" class="w-full rounded-xl border p-3" bind:value={profile.description} />
       </div>
 
       <div>
-        <label class="text-sm text-slate-600">继承父模板（可选）</label>
-        <select class="w-full rounded-xl border p-3" bind:value={profile.parent_profile_id}>
+        <label class="text-sm text-slate-600" for="profile-parent">继承父模板（可选）</label>
+        <select id="profile-parent" class="w-full rounded-xl border p-3" bind:value={profile.parent_profile_id}>
           <option value={null}>无</option>
           {#each allProfiles as p}
             {#if p.id !== profileId}
@@ -143,8 +143,8 @@
 
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
                   <div>
-                    <label class="text-xs text-slate-600">类型</label>
-                    <select class="w-full rounded-xl border p-2" bind:value={r.type} on:change={syncToJson}>
+                    <label class="text-xs text-slate-600" for={`route-type-${i}`}>类型</label>
+                    <select id={`route-type-${i}`} class="w-full rounded-xl border p-2" bind:value={r.type} on:change={syncToJson}>
                       <option value="command">command</option>
                       <option value="keyword">keyword</option>
                       <option value="regex">regex</option>
@@ -152,15 +152,15 @@
                     </select>
                   </div>
                   <div>
-                    <label class="text-xs text-slate-600">匹配</label>
-                    <input class="w-full rounded-xl border p-2" bind:value={r.match} on:input={syncToJson} />
+                    <label class="text-xs text-slate-600" for={`route-match-${i}`}>匹配</label>
+                    <input id={`route-match-${i}`} class="w-full rounded-xl border p-2" bind:value={r.match} on:input={syncToJson} />
                   </div>
                 </div>
 
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
                   <div>
-                    <label class="text-xs text-slate-600">动作类型</label>
-                    <select class="w-full rounded-xl border p-2" bind:value={r.action.type} on:change={syncToJson}>
+                    <label class="text-xs text-slate-600" for={`route-action-${i}`}>动作类型</label>
+                    <select id={`route-action-${i}`} class="w-full rounded-xl border p-2" bind:value={r.action.type} on:change={syncToJson}>
                       <option value="send_message">send_message</option>
                       <option value="call_connector">call_connector</option>
                       <option value="raw_telegram">raw_telegram</option>
@@ -169,27 +169,29 @@
 
                   {#if r.action.type === "call_connector"}
                     <div>
-                      <label class="text-xs text-slate-600">Connector 名称</label>
-                      <input class="w-full rounded-xl border p-2" bind:value={r.action.connectorName} on:input={syncToJson} placeholder="例如: crmSearch" />
+                      <label class="text-xs text-slate-600" for={`route-connector-${i}`}>Connector 名称</label>
+                      <input id={`route-connector-${i}`} class="w-full rounded-xl border p-2" bind:value={r.action.connectorName} on:input={syncToJson} placeholder="例如: crmSearch" />
                     </div>
                   {:else if r.action.type === "raw_telegram"}
                     <div>
-                      <label class="text-xs text-slate-600">Telegram method</label>
-                      <input class="w-full rounded-xl border p-2" bind:value={r.action.method} on:input={syncToJson} placeholder="sendMessage" />
+                      <label class="text-xs text-slate-600" for={`route-method-${i}`}>Telegram method</label>
+                      <input id={`route-method-${i}`} class="w-full rounded-xl border p-2" bind:value={r.action.method} on:input={syncToJson} placeholder="sendMessage" />
                     </div>
                   {:else}
                     <div>
-                      <label class="text-xs text-slate-600">文本</label>
-                      <input class="w-full rounded-xl border p-2" bind:value={r.action.text} on:input={syncToJson} placeholder="回复内容" />
+                      <label class="text-xs text-slate-600" for={`route-text-${i}`}>文本</label>
+                      <input id={`route-text-${i}`} class="w-full rounded-xl border p-2" bind:value={r.action.text} on:input={syncToJson} placeholder="回复内容" />
                     </div>
                   {/if}
                 </div>
 
                 {#if r.action.type === "call_connector"}
                   <div>
-                    <label class="text-xs text-slate-600">输出模板（支持 {{text}}、{{data.xxx}}）</label>
-                    <textarea class="w-full rounded-xl border p-2 min-h-[72px]" bind:value={r.action.outputTemplate} on:input={syncToJson}
-                      placeholder="例如: 查询结果：{{data.result}}" />
+                    <label class="text-xs text-slate-600" for={`route-output-${i}`}>
+                      输出模板（支持 {"{{text}}"}、{"{{data.xxx}}"}）
+                    </label>
+                    <textarea id={`route-output-${i}`} class="w-full rounded-xl border p-2 min-h-[72px]" bind:value={r.action.outputTemplate} on:input={syncToJson}
+                      placeholder={"例如: 查询结果：{{data.result}}"}></textarea>
                   </div>
                 {/if}
               </div>
@@ -201,14 +203,14 @@
           <details class="rounded-xl border p-3">
             <summary class="text-sm font-medium">高级：UI 配置（ui_json）</summary>
             <div class="mt-2 space-y-2">
-              <label class="text-xs text-slate-600">主题模式</label>
-              <select class="w-full rounded-xl border p-2" bind:value={uiObj.theme.mode} on:change={syncToJson}>
+              <label class="text-xs text-slate-600" for="ui-theme-mode">主题模式</label>
+              <select id="ui-theme-mode" class="w-full rounded-xl border p-2" bind:value={uiObj.theme.mode} on:change={syncToJson}>
                 <option value="system">system</option>
                 <option value="light">light</option>
                 <option value="dark">dark</option>
               </select>
-              <label class="text-xs text-slate-600">品牌色（示意）</label>
-              <input class="w-full rounded-xl border p-2" bind:value={uiObj.theme.brand} on:input={syncToJson} placeholder="indigo" />
+              <label class="text-xs text-slate-600" for="ui-theme-brand">品牌色（示意）</label>
+              <input id="ui-theme-brand" class="w-full rounded-xl border p-2" bind:value={uiObj.theme.brand} on:input={syncToJson} placeholder="indigo" />
             </div>
           </details>
         </div>
@@ -220,13 +222,13 @@
               <button class="text-sm underline" on:click={syncFromJson}>从 JSON 刷新表单</button>
             </div>
             <textarea class="mt-2 w-full rounded-xl border p-3 min-h-[260px] font-mono text-xs"
-              bind:value={logicJson} on:input={() => { /* keep */ }} />
+              bind:value={logicJson} on:input={() => { /* keep */ }}></textarea>
           </div>
 
           <div class="rounded-2xl border p-4">
             <h2 class="font-semibold">ui_json</h2>
             <textarea class="mt-2 w-full rounded-xl border p-3 min-h-[160px] font-mono text-xs"
-              bind:value={uiJson} />
+              bind:value={uiJson}></textarea>
           </div>
         </div>
       {/if}

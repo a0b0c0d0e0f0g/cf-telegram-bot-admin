@@ -32,18 +32,18 @@
 
   <div class="mt-4 space-y-3">
     <div>
-      <label class="text-sm text-slate-600">名称</label>
-      <input class="w-full rounded-xl border p-3" bind:value={name} />
+      <label class="text-sm text-slate-600" for="profile-name">名称</label>
+      <input id="profile-name" class="w-full rounded-xl border p-3" bind:value={name} />
     </div>
 
     <div>
-      <label class="text-sm text-slate-600">描述</label>
-      <input class="w-full rounded-xl border p-3" bind:value={description} />
+      <label class="text-sm text-slate-600" for="profile-description">描述</label>
+      <input id="profile-description" class="w-full rounded-xl border p-3" bind:value={description} />
     </div>
 
     <div>
-      <label class="text-sm text-slate-600">从现有模板复制（可选）</label>
-      <select class="w-full rounded-xl border p-3" bind:value={copyFromProfileId}>
+      <label class="text-sm text-slate-600" for="profile-copy">从现有模板复制（可选）</label>
+      <select id="profile-copy" class="w-full rounded-xl border p-3" bind:value={copyFromProfileId}>
         <option value="">不复制（使用默认）</option>
         {#each profiles as p}
           <option value={p.id}>{p.name}</option>

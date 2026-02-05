@@ -38,24 +38,24 @@
 
   <div class="mt-4 space-y-3">
     <div>
-      <label class="text-sm text-slate-600">名称</label>
-      <input class="w-full rounded-xl border p-3" bind:value={name} placeholder="客服机器人" />
+      <label class="text-sm text-slate-600" for="bot-name">名称</label>
+      <input id="bot-name" class="w-full rounded-xl border p-3" bind:value={name} placeholder="客服机器人" />
     </div>
 
     <div>
-      <label class="text-sm text-slate-600">用户名（可选）</label>
-      <input class="w-full rounded-xl border p-3" bind:value={username} placeholder="@your_bot" />
+      <label class="text-sm text-slate-600" for="bot-username">用户名（可选）</label>
+      <input id="bot-username" class="w-full rounded-xl border p-3" bind:value={username} placeholder="@your_bot" />
     </div>
 
     <div>
-      <label class="text-sm text-slate-600">Bot Token</label>
-      <input class="w-full rounded-xl border p-3" bind:value={token} placeholder="123456:ABC..." />
+      <label class="text-sm text-slate-600" for="bot-token">Bot Token</label>
+      <input id="bot-token" class="w-full rounded-xl border p-3" bind:value={token} placeholder="123456:ABC..." />
       <p class="text-xs text-slate-500 mt-1">Token 会用 AES-GCM 加密后写入 D1。</p>
     </div>
 
     <div>
-      <label class="text-sm text-slate-600">绑定配置模板</label>
-      <select class="w-full rounded-xl border p-3" bind:value={configProfileId}>
+      <label class="text-sm text-slate-600" for="bot-profile">绑定配置模板</label>
+      <select id="bot-profile" class="w-full rounded-xl border p-3" bind:value={configProfileId}>
         {#each profiles as p}
           <option value={p.id}>{p.name}</option>
         {/each}

@@ -65,44 +65,44 @@
     <h2 class="font-semibold">新增 connector</h2>
     <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
       <div>
-        <label class="text-xs text-slate-600">名称</label>
-        <input class="w-full rounded-xl border p-2" bind:value={name} placeholder="crmSearch" />
+        <label class="text-xs text-slate-600" for="connector-name">名称</label>
+        <input id="connector-name" class="w-full rounded-xl border p-2" bind:value={name} placeholder="crmSearch" />
       </div>
       <div>
-        <label class="text-xs text-slate-600">Method</label>
-        <select class="w-full rounded-xl border p-2" bind:value={method}>
+        <label class="text-xs text-slate-600" for="connector-method">Method</label>
+        <select id="connector-method" class="w-full rounded-xl border p-2" bind:value={method}>
           <option>GET</option><option>POST</option><option>PUT</option><option>PATCH</option><option>DELETE</option>
         </select>
       </div>
     </div>
 
     <div>
-      <label class="text-xs text-slate-600">Endpoint</label>
-      <input class="w-full rounded-xl border p-2" bind:value={endpoint} placeholder="https://api.example.com/search" />
+      <label class="text-xs text-slate-600" for="connector-endpoint">Endpoint</label>
+      <input id="connector-endpoint" class="w-full rounded-xl border p-2" bind:value={endpoint} placeholder="https://api.example.com/search" />
     </div>
 
     <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
       <div>
-        <label class="text-xs text-slate-600">Auth</label>
-        <select class="w-full rounded-xl border p-2" bind:value={authType}>
+        <label class="text-xs text-slate-600" for="connector-auth-type">Auth</label>
+        <select id="connector-auth-type" class="w-full rounded-xl border p-2" bind:value={authType}>
           <option value="none">none</option>
           <option value="bearer">bearer</option>
         </select>
       </div>
       <div>
-        <label class="text-xs text-slate-600">Secret Name（bearer 时）</label>
-        <input class="w-full rounded-xl border p-2" bind:value={authSecretName} placeholder="CRM_API_KEY" />
+        <label class="text-xs text-slate-600" for="connector-auth-secret">Secret Name（bearer 时）</label>
+        <input id="connector-auth-secret" class="w-full rounded-xl border p-2" bind:value={authSecretName} placeholder="CRM_API_KEY" />
       </div>
     </div>
 
     <div>
-      <label class="text-xs text-slate-600">Headers JSON</label>
-      <textarea class="w-full rounded-xl border p-2 min-h-[80px] font-mono text-xs" bind:value={headersJson} />
+      <label class="text-xs text-slate-600" for="connector-headers">Headers JSON</label>
+      <textarea id="connector-headers" class="w-full rounded-xl border p-2 min-h-[80px] font-mono text-xs" bind:value={headersJson}></textarea>
     </div>
 
     <div>
-      <label class="text-xs text-slate-600">Timeout (ms)</label>
-      <input class="w-full rounded-xl border p-2" type="number" bind:value={timeoutMs} />
+      <label class="text-xs text-slate-600" for="connector-timeout">Timeout (ms)</label>
+      <input id="connector-timeout" class="w-full rounded-xl border p-2" type="number" bind:value={timeoutMs} />
     </div>
 
     {#if error}<p class="text-sm text-red-600">{error}</p>{/if}

@@ -85,18 +85,18 @@
   {:else}
     <div class="mt-4 space-y-3">
       <div>
-        <label class="text-sm text-slate-600">名称</label>
-        <input class="w-full rounded-xl border p-3" bind:value={bot.name} />
+        <label class="text-sm text-slate-600" for="bot-name">名称</label>
+        <input id="bot-name" class="w-full rounded-xl border p-3" bind:value={bot.name} />
       </div>
 
       <div>
-        <label class="text-sm text-slate-600">用户名</label>
-        <input class="w-full rounded-xl border p-3" bind:value={bot.username} />
+        <label class="text-sm text-slate-600" for="bot-username">用户名</label>
+        <input id="bot-username" class="w-full rounded-xl border p-3" bind:value={bot.username} />
       </div>
 
       <div>
-        <label class="text-sm text-slate-600">绑定模板</label>
-        <select class="w-full rounded-xl border p-3" bind:value={bot.config_profile_id}>
+        <label class="text-sm text-slate-600" for="bot-profile">绑定模板</label>
+        <select id="bot-profile" class="w-full rounded-xl border p-3" bind:value={bot.config_profile_id}>
           {#each profiles as p}
             <option value={p.id}>{p.name}</option>
           {/each}
@@ -112,8 +112,8 @@
       </div>
 
       <div>
-        <label class="text-sm text-slate-600">更新 Token（可选）</label>
-        <input class="w-full rounded-xl border p-3" bind:value={token} placeholder="留空则不改" />
+        <label class="text-sm text-slate-600" for="bot-token">更新 Token（可选）</label>
+        <input id="bot-token" class="w-full rounded-xl border p-3" bind:value={token} placeholder="留空则不改" />
       </div>
 
       {#if err}<p class="text-sm text-red-600">{err}</p>{/if}
