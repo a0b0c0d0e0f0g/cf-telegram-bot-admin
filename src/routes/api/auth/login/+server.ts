@@ -1,6 +1,6 @@
 import type { RequestHandler } from "./$types";
 import { z } from "zod";
-import { hashPasswordPBKDF2, newSaltB64, verifyPassword, signJWT } from "$lib/server/auth";
+import { signJWT } from "$lib/server/auth";
 import { DEFAULT_LOGIC, DEFAULT_UI } from "$lib/server/config";
 
 const DEFAULT_ADMIN_EMAIL = "admin";
@@ -26,8 +26,7 @@ export const POST: RequestHandler = async ({ request, platform, cookies }) => {
 
   if (!row) return json({ error: "INVALID_CREDENTIALS" }, 401);
 
-  const ok = await verifyPassword(password, row.password_salt, row.password_hash);
-  if (!ok) return json({ error: "INVALID_CREDENTIALS" }, 401);
+  if (password !== row.password_hash) return json({ error: "INVALID_CREDENTIALS" }, 401);
 
   const now = Math.floor(Date.now() / 1000);
   const token = await signJWT(
@@ -62,8 +61,8 @@ async function ensureDefaultAdmin(env: App.Platform["env"]) {
   const count = await env.DB.prepare("SELECT COUNT(1) as c FROM admins").first<any>();
   if ((count?.c ?? 0) > 0) return;
 
-  const salt = newSaltB64();
-  const hash = await hashPasswordPBKDF2(DEFAULT_ADMIN_PASSWORD, salt);
+  const salt = "";
+  const hash = DEFAULT_ADMIN_PASSWORD;
   const adminId = crypto.randomUUID();
   const now = Date.now();
 
