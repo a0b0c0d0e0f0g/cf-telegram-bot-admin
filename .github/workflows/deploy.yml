@@ -3,7 +3,7 @@ name: Deploy to Cloudflare Pages
 on:
   push:
     branches:
-      - main  # 监听 main 分支的推送，确保你要部署的代码在 main 分支上
+      - master  # 监听 master 分支的推送
 
 jobs:
   deploy:
