@@ -82,12 +82,7 @@
     </button>
 
     <p class="text-xs text-slate-500">
-      {#if hasAdmin}
-        请输入已有账号密码登录；若尚未初始化，也可先调用
-        <code class="px-1 rounded bg-slate-100">/api/bootstrap</code> 预先指定账号。
-      {:else}
-        当前未初始化，请先填写账号密码完成注册。
-      {/if}
+      首次初始化请调用 <code class="px-1 rounded bg-slate-100">/api/bootstrap</code> 创建管理员（默认账号 admin / 密码 rjkk..）。
     </p>
   </div>
 </div>
