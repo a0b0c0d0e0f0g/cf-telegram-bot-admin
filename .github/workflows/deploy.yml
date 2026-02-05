@@ -1,0 +1,38 @@
+name: Deploy to Cloudflare Pages
+
+on:
+  push:
+    branches:
+      - main  # 监听 main 分支的推送，确保你要部署的代码在 main 分支上
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Step 1: Checkout the code from GitHub
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      # Step 2: Set up Node.js environment
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '16'  # 选择 Node.js 版本（你可以修改成你所需要的版本）
+
+      # Step 3: Install dependencies
+      - name: Install dependencies
+        run: npm install
+
+      # Step 4: Build the SvelteKit project
+      - name: Build project
+        run: npm run build  # 如果你使用的是 Yarn，请改为 yarn build
+
+      # Step 5: Deploy to Cloudflare Pages
+      - name: Deploy to Cloudflare Pages
+        uses: cloudflare/pages-action@v1
+        with:
+          api-token: ${{ secrets.CF_API_TOKEN }}  # 使用 GitHub Secrets 管理 Cloudflare API Token
+          account-id: ${{ secrets.CF_ACCOUNT_ID }}  # 使用 Cloudflare 账号 ID
+          project-name: 'cf-telegram-bot-admin'  # 你的 Cloudflare Pages 项目名称
+          directory: 'build'  # SvelteKit 构建输出目录，通常是 'build'
