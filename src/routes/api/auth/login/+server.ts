@@ -3,7 +3,7 @@ import { z } from "zod";
 import { verifyPassword, signJWT } from "$lib/server/auth";
 
 const Body = z.object({
-  email: z.string().email(),
+  email: z.string().min(1),
   password: z.string().min(1)
 });
 
