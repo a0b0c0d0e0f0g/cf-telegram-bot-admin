@@ -7,6 +7,19 @@
   let loading = false;
   let hasAdmin = true;
 
+  const errorLabels: Record<string, string> = {
+    INVALID_CREDENTIALS: "账号或密码错误",
+    UNAUTHORIZED: "请先登录",
+    ALREADY_INITIALIZED: "已初始化，无法注册新管理员",
+    MISSING_FIELDS: "请填写账号和密码"
+  };
+
+  function formatError(raw: unknown, fallback: string) {
+    if (!raw) return fallback;
+    const key = String(raw);
+    return errorLabels[key] ?? key;
+  }
+
   onMount(async () => {
     const res = await fetch("/api/auth/status");
     if (!res.ok) return;
@@ -26,8 +39,8 @@
         body: JSON.stringify({ email, password })
       });
       if (!res.ok) {
-        const j = await res.json().catch(() => ({}));
-        error = j?.error ?? "登录失败";
+        const j = await res.json().catch(() => null);
+        error = formatError(j?.error, "登录失败");
         return;
       }
       location.href = "/dashboard";
@@ -48,8 +61,8 @@
         body: JSON.stringify({ email, password })
       });
       if (!res.ok) {
-        const j = await res.json().catch(() => ({}));
-        error = j?.error ?? "注册失败";
+        const j = await res.json().catch(() => null);
+        error = formatError(j?.error, "注册失败");
         return;
       }
       location.href = "/dashboard";
