@@ -1,38 +1,29 @@
 import type { RequestHandler } from "./$types";
 import { z } from "zod";
-import { newSaltB64, hashPasswordPBKDF2 } from "$lib/server/auth";
+import { hashPasswordPBKDF2, newSaltB64, signJWT } from "$lib/server/auth";
 import { DEFAULT_LOGIC, DEFAULT_UI } from "$lib/server/config";
 
-const DEFAULT_ADMIN_EMAIL = "admin";
-const DEFAULT_ADMIN_PASSWORD = "rjkk..";
-
 const Body = z.object({
-  email: z.string().min(1).optional(),
-  password: z.string().min(1).optional()
+  email: z.string().min(1),
+  password: z.string().min(1)
 });
 
-export const POST: RequestHandler = async ({ request, platform }) => {
+export const POST: RequestHandler = async ({ request, platform, cookies }) => {
   const env = platform!.env;
-  const token = request.headers.get("x-bootstrap-token") ?? "";
-  if (!env.BOOTSTRAP_TOKEN || token !== env.BOOTSTRAP_TOKEN) {
-    return json({ error: "BOOTSTRAP_TOKEN_REQUIRED" }, 403);
-  }
-
-  // Only if no admins exist
   const count = await env.DB.prepare("SELECT COUNT(1) as c FROM admins").first<any>();
   if ((count?.c ?? 0) > 0) return json({ error: "ALREADY_INITIALIZED" }, 409);
 
   const body = Body.safeParse(await request.json().catch(() => ({})));
   if (!body.success) return json({ error: "MISSING_FIELDS" }, 400);
-  const email = body.data.email?.trim() || DEFAULT_ADMIN_EMAIL;
-  const password = body.data.password ?? DEFAULT_ADMIN_PASSWORD;
 
+  const email = body.data.email.trim();
+  const password = body.data.password;
+  if (!email) return json({ error: "MISSING_FIELDS" }, 400);
   const salt = newSaltB64();
   const hash = await hashPasswordPBKDF2(password, salt);
   const adminId = crypto.randomUUID();
   const now = Date.now();
 
-  // Create default profile too
   const profileId = crypto.randomUUID();
   await env.DB.prepare(
     "INSERT INTO config_profiles(id,name,description,parent_profile_id,ui_json,bot_logic_json,created_at,updated_at) VALUES(?,?,?,?,?,?,?,?)"
@@ -54,6 +45,27 @@ export const POST: RequestHandler = async ({ request, platform }) => {
   )
     .bind(adminId, email, hash, salt, "owner", now)
     .run();
+
+  const token = await signJWT(
+    {
+      iss: env.JWT_ISSUER,
+      aud: env.JWT_AUD,
+      sub: adminId,
+      email,
+      role: "owner",
+      iat: Math.floor(now / 1000),
+      exp: Math.floor(now / 1000) + 60 * 60 * 24 * 7
+    },
+    env.JWT_SECRET
+  );
+
+  cookies.set("session", token, {
+    httpOnly: true,
+    secure: true,
+    sameSite: "lax",
+    path: "/",
+    maxAge: 60 * 60 * 24 * 7
+  });
 
   return json({ ok: true, adminId, profileId });
 };

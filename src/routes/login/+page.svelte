@@ -1,8 +1,20 @@
 <script lang="ts">
+  import { onMount } from "svelte";
+
   let email = "";
   let password = "";
   let error = "";
   let loading = false;
+  let hasAdmin = true;
+
+  onMount(async () => {
+    const res = await fetch("/api/auth/status");
+    if (!res.ok) return;
+    const data = await res.json().catch(() => null);
+    if (data && typeof data.hasAdmin === "boolean") {
+      hasAdmin = data.hasAdmin;
+    }
+  });
 
   async function submit() {
     error = "";
@@ -23,6 +35,26 @@
       loading = false;
     }
   }
+
+  async function register() {
+    error = "";
+    loading = true;
+    try {
+      const res = await fetch("/api/auth/register", {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({ email, password })
+      });
+      if (!res.ok) {
+        const j = await res.json().catch(() => ({}));
+        error = j?.error ?? "注册失败";
+        return;
+      }
+      location.href = "/dashboard";
+    } finally {
+      loading = false;
+    }
+  }
 </script>
 
 <div class="min-h-screen flex items-center justify-center p-4">
@@ -30,8 +62,8 @@
     <h1 class="text-xl font-semibold">管理后台登录</h1>
 
     <div class="space-y-2">
-      <label class="text-sm text-slate-600" for="login-email">邮箱</label>
-      <input id="login-email" class="w-full rounded-xl border p-3" placeholder="admin@example.com" bind:value={email} />
+      <label class="text-sm text-slate-600" for="login-account">账号</label>
+      <input id="login-account" class="w-full rounded-xl border p-3" placeholder="admin" bind:value={email} />
     </div>
 
     <div class="space-y-2">
@@ -41,12 +73,21 @@
 
     {#if error}<p class="text-sm text-red-600">{error}</p>{/if}
 
-    <button class="w-full rounded-xl border p-3 active:scale-[0.99]" disabled={loading} on:click={submit}>
-      {loading ? "登录中..." : "登录"}
+    <button
+      class="w-full rounded-xl border p-3 active:scale-[0.99]"
+      disabled={loading}
+      on:click={hasAdmin ? submit : register}
+    >
+      {loading ? "处理中..." : hasAdmin ? "登录" : "注册并登录"}
     </button>
 
     <p class="text-xs text-slate-500">
-      首次初始化请调用 <code class="px-1 rounded bg-slate-100">/api/bootstrap</code> 创建管理员。
+      {#if hasAdmin}
+        请输入已有账号密码登录；若尚未初始化，也可先调用
+        <code class="px-1 rounded bg-slate-100">/api/bootstrap</code> 预先指定账号。
+      {:else}
+        当前未初始化，请先填写账号密码完成注册。
+      {/if}
     </p>
   </div>
 </div>

@@ -3,7 +3,7 @@ import { z } from "zod";
 import { verifyPassword, signJWT } from "$lib/server/auth";
 
 const Body = z.object({
-  email: z.string().email(),
+  email: z.string().min(1),
   password: z.string().min(1)
 });
 
@@ -12,7 +12,9 @@ export const POST: RequestHandler = async ({ request, platform, cookies }) => {
   const body = Body.safeParse(await request.json().catch(() => ({})));
   if (!body.success) return json({ error: "MISSING_FIELDS" }, 400);
 
-  const { email, password } = body.data;
+  const email = body.data.email.trim();
+  const password = body.data.password;
+  if (!email) return json({ error: "MISSING_FIELDS" }, 400);
 
   const row = await env.DB
     .prepare("SELECT id,email,password_hash,password_salt,role FROM admins WHERE email=?")
