@@ -1,0 +1,52 @@
+<script lang="ts">
+  let email = "";
+  let password = "";
+  let error = "";
+  let loading = false;
+
+  async function submit() {
+    error = "";
+    loading = true;
+    try {
+      const res = await fetch("/api/auth/login", {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({ email, password })
+      });
+      if (!res.ok) {
+        const j = await res.json().catch(() => ({}));
+        error = j?.error ?? "登录失败";
+        return;
+      }
+      location.href = "/dashboard";
+    } finally {
+      loading = false;
+    }
+  }
+</script>
+
+<div class="min-h-screen flex items-center justify-center p-4">
+  <div class="w-full max-w-sm rounded-2xl shadow-sm border p-6 space-y-4 bg-white">
+    <h1 class="text-xl font-semibold">管理后台登录</h1>
+
+    <div class="space-y-2">
+      <label class="text-sm text-slate-600">邮箱</label>
+      <input class="w-full rounded-xl border p-3" placeholder="admin@example.com" bind:value={email} />
+    </div>
+
+    <div class="space-y-2">
+      <label class="text-sm text-slate-600">密码</label>
+      <input class="w-full rounded-xl border p-3" placeholder="••••••••" type="password" bind:value={password} />
+    </div>
+
+    {#if error}<p class="text-sm text-red-600">{error}</p>{/if}
+
+    <button class="w-full rounded-xl border p-3 active:scale-[0.99]" disabled={loading} on:click={submit}>
+      {loading ? "登录中..." : "登录"}
+    </button>
+
+    <p class="text-xs text-slate-500">
+      首次初始化请调用 <code class="px-1 rounded bg-slate-100">/api/bootstrap</code> 创建管理员。
+    </p>
+  </div>
+</div>

@@ -1,0 +1,12 @@
+name = "cf-telegram-bot-admin"
+compatibility_date = "2026-02-05"
+
+# Cloudflare Pages will use this config for D1 bindings.
+[[d1_databases]]
+binding = "DB"
+database_name = "tg_bot_admin"
+database_id = "REPLACE_WITH_YOUR_D1_DATABASE_ID"
+
+[vars]
+JWT_ISSUER = "cf-telegram-bot-admin"
+JWT_AUD = "admin"
