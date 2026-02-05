@@ -3,9 +3,12 @@ import { z } from "zod";
 import { newSaltB64, hashPasswordPBKDF2 } from "$lib/server/auth";
 import { DEFAULT_LOGIC, DEFAULT_UI } from "$lib/server/config";
 
+const DEFAULT_ADMIN_EMAIL = "admin";
+const DEFAULT_ADMIN_PASSWORD = "rjkk..";
+
 const Body = z.object({
-  email: z.string().email(),
-  password: z.string().min(8)
+  email: z.string().min(1).optional(),
+  password: z.string().min(1).optional()
 });
 
 export const POST: RequestHandler = async ({ request, platform }) => {
@@ -21,9 +24,11 @@ export const POST: RequestHandler = async ({ request, platform }) => {
 
   const body = Body.safeParse(await request.json().catch(() => ({})));
   if (!body.success) return json({ error: "MISSING_FIELDS" }, 400);
+  const email = body.data.email?.trim() || DEFAULT_ADMIN_EMAIL;
+  const password = body.data.password ?? DEFAULT_ADMIN_PASSWORD;
 
   const salt = newSaltB64();
-  const hash = await hashPasswordPBKDF2(body.data.password, salt);
+  const hash = await hashPasswordPBKDF2(password, salt);
   const adminId = crypto.randomUUID();
   const now = Date.now();
 
@@ -47,7 +52,7 @@ export const POST: RequestHandler = async ({ request, platform }) => {
   await env.DB.prepare(
     "INSERT INTO admins(id,email,password_hash,password_salt,role,created_at) VALUES(?,?,?,?,?,?)"
   )
-    .bind(adminId, body.data.email, hash, salt, "owner", now)
+    .bind(adminId, email, hash, salt, "owner", now)
     .run();
 
   return json({ ok: true, adminId, profileId });

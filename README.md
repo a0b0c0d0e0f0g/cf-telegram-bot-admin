@@ -71,7 +71,7 @@ wrangler secret put BOT_TOKEN_KEY
 ## 4. 首次初始化管理员（只允许一次）
 **POST** `/api/bootstrap`，并带 header：`x-bootstrap-token: <你的 BOOTSTRAP_TOKEN>`
 
-Body:
+Body（可选，不传则使用默认账号 admin / 密码 rjkk..）:
 ```json
 { "email": "admin@example.com", "password": "yourStrongPassword" }
 ```
