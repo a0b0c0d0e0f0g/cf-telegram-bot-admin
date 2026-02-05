@@ -30,13 +30,13 @@
     <h1 class="text-xl font-semibold">管理后台登录</h1>
 
     <div class="space-y-2">
-      <label class="text-sm text-slate-600">邮箱</label>
-      <input class="w-full rounded-xl border p-3" placeholder="admin@example.com" bind:value={email} />
+      <label class="text-sm text-slate-600" for="login-email">邮箱</label>
+      <input id="login-email" class="w-full rounded-xl border p-3" placeholder="admin@example.com" bind:value={email} />
     </div>
 
     <div class="space-y-2">
-      <label class="text-sm text-slate-600">密码</label>
-      <input class="w-full rounded-xl border p-3" placeholder="••••••••" type="password" bind:value={password} />
+      <label class="text-sm text-slate-600" for="login-password">密码</label>
+      <input id="login-password" class="w-full rounded-xl border p-3" placeholder="••••••••" type="password" bind:value={password} />
     </div>
 
     {#if error}<p class="text-sm text-red-600">{error}</p>{/if}
