@@ -31,6 +31,8 @@
         return;
       }
       location.href = "/dashboard";
+    } catch (err) {
+      error = err instanceof Error ? err.message : "网络错误";
     } finally {
       loading = false;
     }
@@ -51,6 +53,8 @@
         return;
       }
       location.href = "/dashboard";
+    } catch (err) {
+      error = err instanceof Error ? err.message : "网络错误";
     } finally {
       loading = false;
     }
@@ -82,7 +86,7 @@
     </button>
 
     <p class="text-xs text-slate-500">
-      首次初始化请调用 <code class="px-1 rounded bg-slate-100">/api/bootstrap</code> 创建管理员（默认账号 admin / 密码 rjkk..）。
+      系统会自动初始化数据库并创建管理员（默认账号 admin / 密码 rjkk..）。
     </p>
   </div>
 </div>
