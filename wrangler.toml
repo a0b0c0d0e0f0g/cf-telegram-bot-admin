@@ -5,7 +5,7 @@ compatibility_date = "2026-02-05"
 [[d1_databases]]
 binding = "DB"
 database_name = "tg_bot_admin"
-database_id = "REPLACE_WITH_YOUR_D1_DATABASE_ID"
+database_id = "61fc1d2a-014c-4769-b0da-1d91aa6cf98f"
 
 [vars]
 JWT_ISSUER = "cf-telegram-bot-admin"

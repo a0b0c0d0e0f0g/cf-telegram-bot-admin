@@ -16,9 +16,8 @@ export const POST: RequestHandler = async ({ request, platform, cookies }) => {
   const body = Body.safeParse(await request.json().catch(() => ({})));
   if (!body.success) return json({ error: "MISSING_FIELDS" }, 400);
 
-  const email = body.data.email.trim();
-  const password = body.data.password;
-  await ensureInitialAdmin(env, { email, password });
+  const { email, password } = body.data;
+  await ensureDefaultAdmin(env);
 
   const row = await env.DB
     .prepare("SELECT id,email,password_hash,password_salt,role FROM admins WHERE email=?")
@@ -59,14 +58,12 @@ function json(body: any, status = 200) {
   return new Response(JSON.stringify(body), { status, headers: { "content-type": "application/json" } });
 }
 
-async function ensureInitialAdmin(env: App.Platform["env"], credentials: { email: string; password: string }) {
+async function ensureDefaultAdmin(env: App.Platform["env"]) {
   const count = await env.DB.prepare("SELECT COUNT(1) as c FROM admins").first<any>();
   if ((count?.c ?? 0) > 0) return;
 
-  const email = credentials.email || DEFAULT_ADMIN_EMAIL;
-  const password = credentials.password || DEFAULT_ADMIN_PASSWORD;
   const salt = newSaltB64();
-  const hash = await hashPasswordPBKDF2(password, salt);
+  const hash = await hashPasswordPBKDF2(DEFAULT_ADMIN_PASSWORD, salt);
   const adminId = crypto.randomUUID();
   const now = Date.now();
 
@@ -89,6 +86,6 @@ async function ensureInitialAdmin(env: App.Platform["env"], credentials: { email
   await env.DB.prepare(
     "INSERT INTO admins(id,email,password_hash,password_salt,role,created_at) VALUES(?,?,?,?,?,?)"
   )
-    .bind(adminId, email, hash, salt, "owner", now)
+    .bind(adminId, DEFAULT_ADMIN_EMAIL, hash, salt, "owner", now)
     .run();
 }
