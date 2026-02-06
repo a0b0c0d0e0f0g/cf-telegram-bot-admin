@@ -1,9 +1,14 @@
 import type { Handle } from "@sveltejs/kit";
 import { verifyJWT } from "$lib/server/auth";
+import { ensureDatabase } from "$lib/server/db";
 
 export const handle: Handle = async ({ event, resolve }) => {
   const url = new URL(event.request.url);
   const token = event.cookies.get("session");
+
+  if (event.platform?.env?.DB) {
+    await ensureDatabase(event.platform.env.DB);
+  }
 
   if (token && event.platform?.env?.JWT_SECRET) {
     const payload = await verifyJWT(token, event.platform.env.JWT_SECRET);
