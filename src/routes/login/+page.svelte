@@ -8,8 +8,7 @@
   let hasAdmin = true;
 
   const errorLabels: Record<string, string> = {
-    ACCOUNT_NOT_FOUND: "账号不存在",
-    INVALID_PASSWORD: "密码不匹配",
+    INVALID_CREDENTIALS: "账号或密码错误",
     UNAUTHORIZED: "请先登录",
     ALREADY_INITIALIZED: "已初始化，无法注册新管理员",
     MISSING_FIELDS: "请填写账号和密码"

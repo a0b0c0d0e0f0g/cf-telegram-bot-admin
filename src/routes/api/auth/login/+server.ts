@@ -1,6 +1,6 @@
 import type { RequestHandler } from "./$types";
 import { z } from "zod";
-import { signJWT, verifyPassword } from "$lib/server/auth";
+import { signJWT } from "$lib/server/auth";
 import { DEFAULT_LOGIC, DEFAULT_UI } from "$lib/server/config";
 
 const DEFAULT_ADMIN_EMAIL = "admin";
@@ -26,10 +26,7 @@ export const POST: RequestHandler = async ({ request, platform, cookies }) => {
 
   if (!row) return json({ error: "ACCOUNT_NOT_FOUND" }, 401);
 
-  const hasSalt = Boolean(row.password_salt);
-  const matchesPlain = password === row.password_hash;
-  const ok = matchesPlain || (hasSalt && (await verifyPassword(password, row.password_salt, row.password_hash)));
-  if (!ok) return json({ error: "INVALID_PASSWORD" }, 401);
+  if (password !== row.password_hash) return json({ error: "INVALID_CREDENTIALS" }, 401);
 
   const now = Math.floor(Date.now() / 1000);
   const token = await signJWT(
