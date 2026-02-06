@@ -21,7 +21,7 @@ export const POST: RequestHandler = async ({ request, platform, cookies }) => {
 
   const row = await env.DB
     .prepare("SELECT id,email,password_hash,password_salt,role FROM admins WHERE email=?")
-    .bind(email)
+    .bind(email.trim())
     .first<any>();
 
   if (!row) return json({ error: "ACCOUNT_NOT_FOUND" }, 401);
